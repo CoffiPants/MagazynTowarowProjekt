@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.magazyntowarowprojekt.MainController">
-    <TableView fx:id="productTable">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.magazyntowarowprojekt.MainController">
+    <TableView fx:id="tabelaProduktow">
         <columns>
-            <TableColumn fx:id="idColumn" text="ID"/>
-            <TableColumn fx:id="nameColumn" text="Name"/>
-            <TableColumn fx:id="priceColumn" text="Price"/>
-            <TableColumn fx:id="quantityColumn" text="Quantity"/>
+            <TableColumn fx:id="kolumnaId" text="ID"/>
+            <TableColumn fx:id="kolumnaNazwa" text="Nazwa"/>
+            <TableColumn fx:id="kolumnaCena" text="Cena"/>
+            <TableColumn fx:id="kolumnaIlosc" text="Ilość"/>
         </columns>
     </TableView>
-    <TextField fx:id="nameField" promptText="Name"/>
-    <TextField fx:id="priceField" promptText="Price"/>
-    <TextField fx:id="quantityField" promptText="Quantity"/>
-    <Button text="Add" onAction="#handleAdd"/>
-    <Button text="Edit" onAction="#handleEdit"/>
-    <Button text="Delete" onAction="#handleDelete"/>
+    <TextField fx:id="poleNazwa" promptText="Nazwa"/>
+    <TextField fx:id="poleCena" promptText="Cena"/>
+    <TextField fx:id="poleIlosc" promptText="Ilość"/>
+    <Button text="Dodaj" onAction="#handleAdd"/>
+    <Button text="Edycja" onAction="#handleEdit"/>
+    <Button text="Usun" onAction="#handleDelete"/>
 </VBox>

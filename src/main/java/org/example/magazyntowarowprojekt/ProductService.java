@@ -18,6 +18,7 @@ public class ProductService {
                 transaction.rollback();
             }
             e.printStackTrace();
+            throw e;
         }
     }
 
