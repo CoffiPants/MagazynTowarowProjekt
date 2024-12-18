@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
 
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.magazyntowarowprojekt.MainController">
-    <TableView fx:id="tabelaProduktow">
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="org.example.magazyntowarowprojekt.MainController" spacing="10">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+    <TableView fx:id="tabelaProduktow" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn fx:id="kolumnaId" text="ID"/>
-            <TableColumn fx:id="kolumnaNazwa" text="Nazwa"/>
-            <TableColumn fx:id="kolumnaCena" text="Cena"/>
-            <TableColumn fx:id="kolumnaIlosc" text="Ilość"/>
+            <TableColumn fx:id="kolumnaId" prefWidth="50.0" text="ID" />
+            <TableColumn fx:id="kolumnaNazwa" prefWidth="150.0" text="Nazwa" />
+            <TableColumn fx:id="kolumnaCena" prefWidth="100.0" text="Cena" />
+            <TableColumn fx:id="kolumnaIlosc" prefWidth="100.0" text="Ilość" />
         </columns>
     </TableView>
-    <TextField fx:id="poleNazwa" promptText="Nazwa"/>
-    <TextField fx:id="poleCena" promptText="Cena"/>
-    <TextField fx:id="poleIlosc" promptText="Ilość"/>
-    <Button text="Dodaj" onAction="#handleAdd"/>
-    <Button text="Edycja" onAction="#handleEdit"/>
-    <Button text="Usun" onAction="#handleDelete"/>
+    <HBox spacing="10">
+        <TextField fx:id="poleNazwa" promptText="Nazwa" HBox.hgrow="ALWAYS"/>
+        <TextField fx:id="poleCena" promptText="Cena" HBox.hgrow="ALWAYS"/>
+        <TextField fx:id="poleIlosc" promptText="Ilość" HBox.hgrow="ALWAYS"/>
+    </HBox>
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Dodaj" onAction="#handleAdd" styleClass="button-primary"/>
+        <Button text="Edycja" onAction="#handleEdit" styleClass="button-secondary"/>
+        <Button text="Usuń" onAction="#handleDelete" styleClass="button-danger"/>
+    </HBox>
 </VBox>

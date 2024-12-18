@@ -7,6 +7,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.Objects;
 
 public class Main extends Application {
 
@@ -16,10 +17,11 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(url);
         VBox root = loader.load();
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
 
         primaryStage.setTitle("Magazyn Towarów");
         primaryStage.setScene(scene);
+        primaryStage.setResizable(true); // Ensure the stage is resizable
         primaryStage.show();
     }
 
