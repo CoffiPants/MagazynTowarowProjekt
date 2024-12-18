@@ -1,37 +1,59 @@
-// src/main/java/org/example/magazyntowarowprojekt/ProduktRepository.java
 package org.example.magazyntowarowprojekt;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import java.util.List;
 
 public class ProduktRepository {
 
-    private EntityManagerFactory emf;
-    private EntityManager em;
-
-    public ProduktRepository() {
-        emf = Persistence.createEntityManagerFactory("magazynPU");
-        em = emf.createEntityManager();
-    }
-
     public void addProdukt(Produkt produkt) {
-        EntityTransaction transaction = em.getTransaction();
-        try {
-            transaction.begin();
-            em.persist(produkt);
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.save(produkt);
             transaction.commit();
         } catch (Exception e) {
-            if (transaction.isActive()) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+    public List<Produkt> getAllProducts() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("from Produkt", Produkt.class).list();
+        }
+    }
+
+    public void updateProduct(Produkt product) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.update(product);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
                 transaction.rollback();
             }
             e.printStackTrace();
         }
     }
 
-    public void close() {
-        em.close();
-        emf.close();
+    public void deleteProduct(int id) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            Produkt product = session.get(Produkt.class, id);
+            if (product != null) {
+                session.delete(product);
+                transaction.commit();
+            }
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 }

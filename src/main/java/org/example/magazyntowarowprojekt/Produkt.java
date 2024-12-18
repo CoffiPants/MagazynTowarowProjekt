@@ -1,72 +1,55 @@
 package org.example.magazyntowarowprojekt;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import javafx.beans.property.*;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "produkty")
 public class Produkt {
-    private final SimpleIntegerProperty id;
-    private final SimpleStringProperty name;
-    private final SimpleDoubleProperty price;
-    private final SimpleIntegerProperty quantity;
-
-    public Produkt() {
-        this.id = new SimpleIntegerProperty();
-        this.name = new SimpleStringProperty();
-        this.price = new SimpleDoubleProperty();
-        this.quantity = new SimpleIntegerProperty();
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(name = "nazwa", nullable = false)
+    private String nazwa;
+
+    @Column(name = "cena", nullable = false)
+    private float cena;
+
+    @Column(name = "ilosc", nullable = false)
+    private int ilosc;
+
+    // Getery i Setery
+
     public int getId() {
-        return id.get();
-    }
-
-    public void setId(int id) {
-        this.id.set(id);
-    }
-
-    public SimpleIntegerProperty idProperty() {
         return id;
     }
 
-    public String getName() {
-        return name.get();
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setName(String name) {
-        this.name.set(name);
+    public String getNazwa() {
+        return nazwa;
     }
 
-    public SimpleStringProperty nameProperty() {
-        return name;
+    public void setNazwa(String nazwa) {
+        this.nazwa = nazwa;
     }
 
-    public double getPrice() {
-        return price.get();
+    public float getCena() {
+        return cena;
     }
 
-    public void setPrice(double price) {
-        this.price.set(price);
+    public void setCena(float cena) {
+        this.cena = cena;
     }
 
-    public SimpleDoubleProperty priceProperty() {
-        return price;
+    public int getIlosc() {
+        return ilosc;
     }
 
-    public int getQuantity() {
-        return quantity.get();
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity.set(quantity);
-    }
-
-    public SimpleIntegerProperty quantityProperty() {
-        return quantity;
+    public void setIlosc(int ilosc) {
+        this.ilosc = ilosc;
     }
 }

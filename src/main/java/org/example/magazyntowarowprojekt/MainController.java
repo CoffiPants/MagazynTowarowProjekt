@@ -8,78 +8,110 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 public class MainController {
 
     @FXML
-    private TableView<Produkt> productTable;
+    private TableView<Produkt> tabelaProduktow;
     @FXML
-    private TableColumn<Produkt, Integer> idColumn;
+    private TableColumn<Produkt, Number> kolumnaId;
     @FXML
-    private TableColumn<Produkt, String> nameColumn;
+    private TableColumn<Produkt, String> kolumnaNazwa;
     @FXML
-    private TableColumn<Produkt, Double> priceColumn;
+    private TableColumn<Produkt, Number> kolumnaCena;
     @FXML
-    private TableColumn<Produkt, Integer> quantityColumn;
+    private TableColumn<Produkt, Number> kolumnaIlosc;
     @FXML
-    private TextField nameField;
+    private TextField poleNazwa;
     @FXML
-    private TextField priceField;
+    private TextField poleCena;
     @FXML
-    private TextField quantityField;
+    private TextField poleIlosc;
 
-    private ObservableList<Produkt> productList = FXCollections.observableArrayList();
-    private ProduktRepository repository = new ProduktRepository();
+    private ObservableList<Produkt> listaProduktow = FXCollections.observableArrayList();
+    private ProductService productService = new ProductService();
 
     @FXML
     private void initialize() {
-        idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
-        nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-        priceColumn.setCellValueFactory(cellData -> cellData.getValue().priceProperty().asObject());
-        quantityColumn.setCellValueFactory(cellData -> cellData.getValue().quantityProperty().asObject());
+        kolumnaId.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getId()));
+        kolumnaNazwa.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNazwa()));
+        kolumnaCena.setCellValueFactory(cellData -> new SimpleFloatProperty(cellData.getValue().getCena()));
+        kolumnaIlosc.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getIlosc()));
 
-        productTable.setItems(productList);
+        tabelaProduktow.setItems(listaProduktow);
+        loadProducts();
     }
-
     @FXML
     private void handleAdd(ActionEvent event) {
-        String name = nameField.getText();
-        double price = Double.parseDouble(priceField.getText());
-        int quantity = Integer.parseInt(quantityField.getText());
+        String nazwa = poleNazwa.getText();
+        float cena = Float.parseFloat(poleCena.getText());
+        int ilosc = Integer.parseInt(poleIlosc.getText());
 
-        Produkt newProduct = new Produkt();
-        newProduct.setName(name);
-        newProduct.setPrice(price);
-        newProduct.setQuantity(quantity);
+        Produkt nowyProdukt = new Produkt();
+        nowyProdukt.setNazwa(nazwa);
+        nowyProdukt.setCena(cena);
+        nowyProdukt.setIlosc(ilosc);
 
-        repository.addProdukt(newProduct);
-        productList.add(newProduct);
-        clearFields();
-    }
-
-    @FXML
-    private void handleEdit(ActionEvent event) {
-        Produkt selectedProduct = productTable.getSelectionModel().getSelectedItem();
-        if (selectedProduct != null) {
-            selectedProduct.setName(nameField.getText());
-            selectedProduct.setPrice(Double.parseDouble(priceField.getText()));
-            selectedProduct.setQuantity(Integer.parseInt(quantityField.getText()));
-            productTable.refresh();
+        try {
+            productService.saveProduct(nowyProdukt);
+            listaProduktow.add(nowyProdukt);
             clearFields();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
+@FXML
+private void handleEdit(ActionEvent event) {
+    Produkt wybranyProdukt = tabelaProduktow.getSelectionModel().getSelectedItem();
+    if (wybranyProdukt != null) {
+        String nazwa = poleNazwa.getText();
+        String cenaText = poleCena.getText();
+        String iloscText = poleIlosc.getText();
+
+        if (nazwa.isEmpty() || cenaText.isEmpty() || iloscText.isEmpty()) {
+            // Handle the case where one or more fields are empty (e.g., show an error message)
+            System.out.println("All fields must be filled out.");
+            return;
+        }
+
+        float cena = Float.parseFloat(cenaText);
+        int ilosc = Integer.parseInt(iloscText);
+
+        wybranyProdukt.setNazwa(nazwa);
+        wybranyProdukt.setCena(cena);
+        wybranyProdukt.setIlosc(ilosc);
+
+        try {
+            productService.updateProduct(wybranyProdukt);
+            tabelaProduktow.refresh();
+            clearFields();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
 
     @FXML
     private void handleDelete(ActionEvent event) {
-        int selectedIndex = productTable.getSelectionModel().getSelectedIndex();
-        if (selectedIndex >= 0) {
-            productTable.getItems().remove(selectedIndex);
+        Produkt wybranyProdukt = tabelaProduktow.getSelectionModel().getSelectedItem();
+        if (wybranyProdukt != null) {
+            productService.deleteProduct(wybranyProdukt.getId());
+            listaProduktow.remove(wybranyProdukt);
         }
     }
 
+    private void loadProducts() {
+        listaProduktow.setAll(productService.getAllProducts());
+    }
+
     private void clearFields() {
-        nameField.clear();
-        priceField.clear();
-        quantityField.clear();
+        poleNazwa.clear();
+        poleCena.clear();
+        poleIlosc.clear();
     }
 }
