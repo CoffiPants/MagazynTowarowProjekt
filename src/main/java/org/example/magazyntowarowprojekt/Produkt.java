@@ -19,6 +19,15 @@ public class Produkt {
     @Column(name = "ilosc", nullable = false)
     private int ilosc;
 
+    @Column(name = "producent")
+    private String producent;
+
+    @Column(name = "kategoria")
+    private String kategoria;
+
+    @Column(name = "opis")
+    private String opis;
+
     // Getery i Setery
 
     public int getId() {
@@ -51,5 +60,29 @@ public class Produkt {
 
     public void setIlosc(int ilosc) {
         this.ilosc = ilosc;
+    }
+
+    public String getProducent() {
+        return producent;
+    }
+
+    public void setProducent(String producent) {
+        this.producent = producent;
+    }
+
+    public String getKategoria() {
+        return kategoria;
+    }
+
+    public void setKategoria(String kategoria) {
+        this.kategoria = kategoria;
+    }
+
+    public String getOpis() {
+        return opis;
+    }
+
+    public void setOpis(String opis) {
+        this.opis = opis;
     }
 }

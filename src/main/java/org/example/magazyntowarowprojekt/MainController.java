@@ -12,6 +12,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.control.Alert;
 
 public class MainController {
 
@@ -26,44 +27,82 @@ public class MainController {
     @FXML
     private TableColumn<Produkt, Number> kolumnaIlosc;
     @FXML
+    private TableColumn<Produkt, String> kolumnaProducent;
+    @FXML
+    private TableColumn<Produkt, String> kolumnaKategoria;
+    @FXML
+    private TableColumn<Produkt, String> kolumnaOpis;
+    @FXML
     private TextField poleNazwa;
     @FXML
     private TextField poleCena;
     @FXML
     private TextField poleIlosc;
+    @FXML
+    private TextField poleProducent;
+    @FXML
+    private TextField poleKategoria;
+    @FXML
+    private TextField poleOpis;
 
     private ObservableList<Produkt> listaProduktow = FXCollections.observableArrayList();
     private ProductService productService = new ProductService();
 
-    @FXML
-    private void initialize() {
-        kolumnaId.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getId()));
-        kolumnaNazwa.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNazwa()));
-        kolumnaCena.setCellValueFactory(cellData -> new SimpleFloatProperty(cellData.getValue().getCena()));
-        kolumnaIlosc.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getIlosc()));
 
-        tabelaProduktow.setItems(listaProduktow);
+@FXML
+private void initialize() {
+    kolumnaId.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getId()));
+    kolumnaNazwa.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNazwa()));
+    kolumnaCena.setCellValueFactory(cellData -> new SimpleFloatProperty(cellData.getValue().getCena()));
+    kolumnaIlosc.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getIlosc()));
+    kolumnaProducent.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProducent()));
+    kolumnaKategoria.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getKategoria()));
+    kolumnaOpis.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getOpis()));
+
+    tabelaProduktow.setItems(listaProduktow);
+    loadProducts();
+}
+@FXML
+private void handleAdd(ActionEvent event) {
+    String nazwa = poleNazwa.getText().trim();
+    String cenaText = poleCena.getText().trim();
+    String iloscText = poleIlosc.getText().trim();
+    String producent = poleProducent.getText().trim();
+    String kategoria = poleKategoria.getText().trim();
+    String opis = poleOpis.getText().trim();
+
+    if (nazwa.isEmpty() || cenaText.isEmpty() || iloscText.isEmpty()) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Błąd");
+        alert.setHeaderText(null);
+        alert.setContentText("Pola nazwa, cena i ilość muszą być wypełnione.");
+        alert.showAndWait();
+        return;
+    }
+
+    try {
+        float cena = Float.parseFloat(cenaText);
+        int ilosc = Integer.parseInt(iloscText);
+
+        Produkt produkt = new Produkt();
+        produkt.setNazwa(nazwa);
+        produkt.setCena(cena);
+        produkt.setIlosc(ilosc);
+        produkt.setProducent(producent);
+        produkt.setKategoria(kategoria);
+        produkt.setOpis(opis);
+
+        productService.saveProduct(produkt);
         loadProducts();
-    }
-    @FXML
-    private void handleAdd(ActionEvent event) {
-        String nazwa = poleNazwa.getText();
-        float cena = Float.parseFloat(poleCena.getText());
-        int ilosc = Integer.parseInt(poleIlosc.getText());
 
-        Produkt nowyProdukt = new Produkt();
-        nowyProdukt.setNazwa(nazwa);
-        nowyProdukt.setCena(cena);
-        nowyProdukt.setIlosc(ilosc);
-
-        try {
-            productService.saveProduct(nowyProdukt);
-            listaProduktow.add(nowyProdukt);
-            clearFields();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    } catch (NumberFormatException e) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Błąd");
+        alert.setHeaderText(null);
+        alert.setContentText("Proszę wprowadzić prawidłowe wartości dla ceny i ilości.");
+        alert.showAndWait();
     }
+}
 
 @FXML
 private void handleEdit(ActionEvent event) {
@@ -73,11 +112,14 @@ private void handleEdit(ActionEvent event) {
         String cenaText = poleCena.getText();
         String iloscText = poleIlosc.getText();
 
-        if (nazwa.isEmpty() || cenaText.isEmpty() || iloscText.isEmpty()) {
-            // Handle the case where one or more fields are empty (e.g., show an error message)
-            System.out.println("All fields must be filled out.");
-            return;
-        }
+if (nazwa.isEmpty() || cenaText.isEmpty() || iloscText.isEmpty()) {
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle("Error");
+    alert.setHeaderText(null);
+    alert.setContentText("All fields must be filled out.");
+    alert.showAndWait();
+    return;
+}
 
         float cena = Float.parseFloat(cenaText);
         int ilosc = Integer.parseInt(iloscText);

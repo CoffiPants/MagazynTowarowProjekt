@@ -18,12 +18,20 @@
             <TableColumn fx:id="kolumnaNazwa" prefWidth="150.0" text="Nazwa" />
             <TableColumn fx:id="kolumnaCena" prefWidth="100.0" text="Cena" />
             <TableColumn fx:id="kolumnaIlosc" prefWidth="100.0" text="Ilość" />
+            <TableColumn fx:id="kolumnaProducent" prefWidth="100.0" text="Producent" />
+            <TableColumn fx:id="kolumnaKategoria" prefWidth="100.0" text="Kategoria" />
+            <TableColumn fx:id="kolumnaOpis" prefWidth="150.0" text="Opis" />
         </columns>
     </TableView>
     <HBox spacing="10">
         <TextField fx:id="poleNazwa" promptText="Nazwa" HBox.hgrow="ALWAYS"/>
         <TextField fx:id="poleCena" promptText="Cena" HBox.hgrow="ALWAYS"/>
         <TextField fx:id="poleIlosc" promptText="Ilość" HBox.hgrow="ALWAYS"/>
+    </HBox>
+    <HBox spacing="10">
+        <TextField fx:id="poleProducent" promptText="Producent" HBox.hgrow="ALWAYS"/>
+        <TextField fx:id="poleKategoria" promptText="Kategoria" HBox.hgrow="ALWAYS"/>
+        <TextField fx:id="poleOpis" promptText="Opis" HBox.hgrow="ALWAYS"/>
     </HBox>
     <HBox spacing="10" alignment="CENTER">
         <Button text="Dodaj" onAction="#handleAdd" styleClass="button-primary"/>
