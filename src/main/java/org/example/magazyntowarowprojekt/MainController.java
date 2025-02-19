@@ -1,159 +1,154 @@
-// src/main/java/org/example/magazyntowarowprojekt/MainController.java
 package org.example.magazyntowarowprojekt;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.scene.control.Alert;
+    import javafx.collections.FXCollections;
+    import javafx.collections.ObservableList;
+    import javafx.event.ActionEvent;
+    import javafx.fxml.FXML;
+    import javafx.fxml.FXMLLoader;
+    import javafx.scene.Scene;
+    import javafx.scene.control.Alert;
+    import javafx.scene.control.TableColumn;
+    import javafx.scene.control.TableView;
+    import javafx.scene.layout.VBox;
+    import javafx.stage.Modality;
+    import javafx.stage.Stage;
+    import javafx.beans.property.SimpleIntegerProperty;
+    import javafx.beans.property.SimpleStringProperty;
+    import javafx.beans.property.SimpleFloatProperty;
+    import javafx.beans.property.SimpleObjectProperty;
+    import java.io.IOException;
+    import javafx.scene.control.ContextMenu;
+    import javafx.scene.control.MenuItem;
+    import javafx.scene.input.MouseButton;
 
-public class MainController {
+    public class MainController {
+        @FXML
+        private TableView<Produkt> tabelaProduktow;
+        @FXML
+        private TableColumn<Produkt, Number> kolumnaId;
+        @FXML
+        private TableColumn<Produkt, String> kolumnaNazwa;
+        @FXML
+        private TableColumn<Produkt, Number> kolumnaCena;
+        @FXML
+        private TableColumn<Produkt, Number> kolumnaIlosc;
+        @FXML
+        private TableColumn<Produkt, String> kolumnaProducent;
+        @FXML
+        private TableColumn<Produkt, String> kolumnaKategoria;
+        @FXML
+        private TableColumn<Produkt, String> kolumnaOpis;
 
-    @FXML
-    private TableView<Produkt> tabelaProduktow;
-    @FXML
-    private TableColumn<Produkt, Number> kolumnaId;
-    @FXML
-    private TableColumn<Produkt, String> kolumnaNazwa;
-    @FXML
-    private TableColumn<Produkt, Number> kolumnaCena;
-    @FXML
-    private TableColumn<Produkt, Number> kolumnaIlosc;
-    @FXML
-    private TableColumn<Produkt, String> kolumnaProducent;
-    @FXML
-    private TableColumn<Produkt, String> kolumnaKategoria;
-    @FXML
-    private TableColumn<Produkt, String> kolumnaOpis;
-    @FXML
-    private TextField poleNazwa;
-    @FXML
-    private TextField poleCena;
-    @FXML
-    private TextField poleIlosc;
-    @FXML
-    private TextField poleProducent;
-    @FXML
-    private TextField poleKategoria;
-    @FXML
-    private TextField poleOpis;
+        private ObservableList<Produkt> listaProduktow = FXCollections.observableArrayList();
+        private ProductService productService = new ProductService();
 
-    private ObservableList<Produkt> listaProduktow = FXCollections.observableArrayList();
-    private ProductService productService = new ProductService();
+        @FXML
+        private void initialize() {
+            kolumnaId.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getId()));
+            kolumnaNazwa.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNazwa()));
+            kolumnaCena.setCellValueFactory(cellData -> new SimpleFloatProperty(cellData.getValue().getCena()));
+            kolumnaIlosc.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getIlosc()));
+            kolumnaProducent.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProducent()));
+            kolumnaKategoria.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getKategoria()));
+            kolumnaOpis.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getOpis()));
 
+            // Create context menu
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem deleteItem = new MenuItem("Usuń");
+            deleteItem.setOnAction(event -> {
+                Produkt selectedProduct = tabelaProduktow.getSelectionModel().getSelectedItem();
+                if (selectedProduct != null) {
+                    productService.deleteProduct(selectedProduct.getId());
+                    loadProducts();
+                }
+            });
+            contextMenu.getItems().add(deleteItem);
+            tabelaProduktow.setContextMenu(contextMenu);
 
-@FXML
-private void initialize() {
-    kolumnaId.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getId()));
-    kolumnaNazwa.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNazwa()));
-    kolumnaCena.setCellValueFactory(cellData -> new SimpleFloatProperty(cellData.getValue().getCena()));
-    kolumnaIlosc.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getIlosc()));
-    kolumnaProducent.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProducent()));
-    kolumnaKategoria.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getKategoria()));
-    kolumnaOpis.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getOpis()));
+            // Handle both edit and add with double-click
+            tabelaProduktow.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && event.getButton() == MouseButton.PRIMARY) {
+                    if (tabelaProduktow.getSelectionModel().getSelectedItem() != null) {
+                        handleRowClick(); // Edit existing product
+                    } else {
+                        try {
+                            showAddDialog(); // Add new product
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
 
-    tabelaProduktow.setItems(listaProduktow);
-    loadProducts();
-}
-@FXML
-private void handleAdd(ActionEvent event) {
-    String nazwa = poleNazwa.getText().trim();
-    String cenaText = poleCena.getText().trim();
-    String iloscText = poleIlosc.getText().trim();
-    String producent = poleProducent.getText().trim();
-    String kategoria = poleKategoria.getText().trim();
-    String opis = poleOpis.getText().trim();
+            tabelaProduktow.setItems(listaProduktow);
+            loadProducts();
+        }
 
-    if (nazwa.isEmpty() || cenaText.isEmpty() || iloscText.isEmpty()) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Błąd");
-        alert.setHeaderText(null);
-        alert.setContentText("Pola nazwa, cena i ilość muszą być wypełnione.");
-        alert.showAndWait();
-        return;
-    }
+        @FXML
+        private void showAddDialog() throws IOException {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/magazyntowarowprojekt/AddProductDialog.fxml"));
+            VBox dialogPane = loader.load();
 
-    try {
-        float cena = Float.parseFloat(cenaText);
-        int ilosc = Integer.parseInt(iloscText);
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Dodaj produkt");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(tabelaProduktow.getScene().getWindow());
 
-        Produkt produkt = new Produkt();
-        produkt.setNazwa(nazwa);
-        produkt.setCena(cena);
-        produkt.setIlosc(ilosc);
-        produkt.setProducent(producent);
-        produkt.setKategoria(kategoria);
-        produkt.setOpis(opis);
+            AddProductDialogController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setMainController(this);
+            controller.setProductService(productService);
 
-        productService.saveProduct(produkt);
-        loadProducts();
+            Scene scene = new Scene(dialogPane);
+            dialogStage.setScene(scene);
+            dialogStage.showAndWait();
+        }
 
-    } catch (NumberFormatException e) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Błąd");
-        alert.setHeaderText(null);
-        alert.setContentText("Proszę wprowadzić prawidłowe wartości dla ceny i ilości.");
-        alert.showAndWait();
-    }
-}
-
-@FXML
-private void handleEdit(ActionEvent event) {
-    Produkt wybranyProdukt = tabelaProduktow.getSelectionModel().getSelectedItem();
-    if (wybranyProdukt != null) {
-        String nazwa = poleNazwa.getText();
-        String cenaText = poleCena.getText();
-        String iloscText = poleIlosc.getText();
-
-if (nazwa.isEmpty() || cenaText.isEmpty() || iloscText.isEmpty()) {
-    Alert alert = new Alert(Alert.AlertType.ERROR);
-    alert.setTitle("Error");
-    alert.setHeaderText(null);
-    alert.setContentText("All fields must be filled out.");
-    alert.showAndWait();
-    return;
-}
-
-        float cena = Float.parseFloat(cenaText);
-        int ilosc = Integer.parseInt(iloscText);
-
-        wybranyProdukt.setNazwa(nazwa);
-        wybranyProdukt.setCena(cena);
-        wybranyProdukt.setIlosc(ilosc);
-
+        @FXML
+private void handleRowClick() {
+    Produkt selectedProduct = tabelaProduktow.getSelectionModel().getSelectedItem();
+    if (selectedProduct != null && tabelaProduktow.getSelectionModel().getSelectedCells().size() > 0) {
         try {
-            productService.updateProduct(wybranyProdukt);
-            tabelaProduktow.refresh();
-            clearFields();
-        } catch (Exception e) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/magazyntowarowprojekt/AddProductDialog.fxml"));
+            VBox dialogPane = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Edytuj produkt");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(tabelaProduktow.getScene().getWindow());
+
+            AddProductDialogController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setMainController(this);
+            controller.setProductService(productService);
+            controller.setProduct(selectedProduct); // Add this method to AddProductDialogController
+
+            Scene scene = new Scene(dialogPane);
+            dialogStage.setScene(scene);
+            dialogStage.showAndWait();
+        } catch (IOException e) {
             e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Błąd podczas otwierania formularza edycji");
+            alert.showAndWait();
         }
     }
 }
 
-    @FXML
-    private void handleDelete(ActionEvent event) {
-        Produkt wybranyProdukt = tabelaProduktow.getSelectionModel().getSelectedItem();
-        if (wybranyProdukt != null) {
-            productService.deleteProduct(wybranyProdukt.getId());
-            listaProduktow.remove(wybranyProdukt);
+        @FXML
+        private void handleDelete(ActionEvent event) {
+            Produkt selectedProduct = tabelaProduktow.getSelectionModel().getSelectedItem();
+            if (selectedProduct != null) {
+                productService.deleteProduct(selectedProduct.getId());
+                loadProducts();
+            }
+        }
+
+        private void loadProducts() {
+            listaProduktow.setAll(productService.getAllProducts());
+        }
+
+        public void refreshTable() {
+            loadProducts();
         }
     }
-
-    private void loadProducts() {
-        listaProduktow.setAll(productService.getAllProducts());
-    }
-
-    private void clearFields() {
-        poleNazwa.clear();
-        poleCena.clear();
-        poleIlosc.clear();
-    }
-}
