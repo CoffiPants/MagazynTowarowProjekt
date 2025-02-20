@@ -31,6 +31,7 @@ public class Produkt {
     @ManyToOne
     @JoinColumn(name = "dostawca_id")
     private Dostawca dostawca;
+
     // Getery i Setery
     public Produkt() {
         // Required by Hibernate

@@ -30,11 +30,11 @@
         <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
     </GridPane>
 
-<HBox spacing="10" alignment="CENTER_RIGHT">
-    <padding>
-        <Insets top="10" right="10" bottom="10" left="10"/>
-    </padding>
-    <Button text="Zapisz" onAction="#handleSave"/>
-    <Button text="Anuluj" onAction="#handleCancel"/>
-</HBox>
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
+        <Button text="Zapisz" onAction="#handleSave"/>
+        <Button text="Anuluj" onAction="#handleCancel"/>
+    </HBox>
 </VBox>

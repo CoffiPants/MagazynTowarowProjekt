@@ -29,17 +29,17 @@
 
     <TabPane VBox.vgrow="ALWAYS">
         <Tab text="Produkty" closable="false">
-<TableView fx:id="tabelaProduktow">
-    <columns>
-        <TableColumn fx:id="kolumnaId" text="ID"/>
-        <TableColumn fx:id="kolumnaNazwa" text="Nazwa"/>
-        <TableColumn fx:id="kolumnaCena" text="Cena"/>
-        <TableColumn fx:id="kolumnaIlosc" text="Ilość"/>
-        <TableColumn fx:id="kolumnaProducent" text="Producent"/>
-        <TableColumn fx:id="kolumnaKategoria" text="Kategoria"/>
-        <TableColumn fx:id="kolumnaOpis" text="Opis"/>
-    </columns>
-</TableView>
+            <TableView fx:id="tabelaProduktow">
+                <columns>
+                    <TableColumn fx:id="kolumnaId" text="ID"/>
+                    <TableColumn fx:id="kolumnaNazwa" text="Nazwa"/>
+                    <TableColumn fx:id="kolumnaCena" text="Cena"/>
+                    <TableColumn fx:id="kolumnaIlosc" text="Ilość"/>
+                    <TableColumn fx:id="kolumnaProducent" text="Producent"/>
+                    <TableColumn fx:id="kolumnaKategoria" text="Kategoria"/>
+                    <TableColumn fx:id="kolumnaOpis" text="Opis"/>
+                </columns>
+            </TableView>
         </Tab>
         <Tab text="Dostawcy" closable="false">
             <TableView fx:id="tabelaDostawcow">

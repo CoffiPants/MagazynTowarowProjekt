@@ -1,6 +1,7 @@
 package org.example.magazyntowarowprojekt;
 
 import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class Dostawca {
     public Dostawca() {
         // Required by Hibernate
     }
+
     public Dostawca(Long id, String nazwa, String adres, String nip, String telefon, String email, List<Produkt> produkty) {
         this.id = id;
         this.nazwa = nazwa;
