@@ -28,7 +28,13 @@ public class Produkt {
     @Column(name = "opis")
     private String opis;
 
+    @ManyToOne
+    @JoinColumn(name = "dostawca_id")
+    private Dostawca dostawca;
     // Getery i Setery
+    public Produkt() {
+        // Required by Hibernate
+    }
 
     public int getId() {
         return id;
@@ -84,5 +90,13 @@ public class Produkt {
 
     public void setOpis(String opis) {
         this.opis = opis;
+    }
+
+    public Dostawca getDostawca() {
+        return dostawca;
+    }
+
+    public void setDostawca(Dostawca dostawca) {
+        this.dostawca = dostawca;
     }
 }

@@ -23,3 +23,36 @@
     -fx-font-size: 14px;
     -fx-padding: 10px;
 }
+
+.table-row-cell:selected {
+    -fx-background-color: #0096ff;
+}
+
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: white;
+}
+
+.table-view:focused .table-row-cell:selected {
+    -fx-background-color: #0096ff;
+}
+
+.tab-pane {
+    -fx-tab-min-height: 30px;
+}
+
+.tab {
+    -fx-background-color: #f0f0f0;
+    -fx-padding: 5px 10px;
+}
+
+.tab:selected {
+    -fx-background-color: #0096ff;
+}
+
+.tab:selected .tab-label {
+    -fx-text-fill: white;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
+    -fx-border-color: transparent;
+}

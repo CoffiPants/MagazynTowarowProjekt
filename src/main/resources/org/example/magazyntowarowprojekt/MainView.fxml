@@ -1,37 +1,68 @@
 <?import javafx.scene.control.*?>
-            <?import javafx.scene.layout.*?>
-            <?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-            <VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1"
-                  fx:controller="org.example.magazyntowarowprojekt.MainController"
-                  spacing="10">
-                <padding>
-                    <Insets top="10" right="10" bottom="10" left="10"/>
-                </padding>
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/20"
+      fx:controller="org.example.magazyntowarowprojekt.MainController"
+      spacing="10">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
 
-                <MenuBar>
-                    <Menu text="Produkt">
-                        <MenuItem text="Dodaj nowy" onAction="#showAddDialog"/>
-                        <MenuItem text="Usuń zaznaczony" onAction="#handleDelete"/>
-                    </Menu>
-                </MenuBar>
+    <MenuBar>
+        <Menu text="Plik">
+            <MenuItem text="Zamknij" onAction="#handleClose"/>
+        </Menu>
+        <Menu text="Produkt">
+            <MenuItem text="Dodaj nowy" onAction="#showAddDialog"/>
+            <MenuItem text="Usuń zaznaczony" onAction="#handleDelete"/>
+        </Menu>
+        <Menu text="Dostawca">
+            <MenuItem text="Dodaj nowego" onAction="#showAddDostawcaDialog"/>
+            <MenuItem text="Usuń zaznaczonego" onAction="#handleDeleteDostawca"/>
+        </Menu>
+        <Menu text="Zamówienie">
+            <MenuItem text="Nowe zamówienie" onAction="#showAddZamowienieDialog"/>
+            <MenuItem text="Usuń zamówienie" onAction="#handleDeleteZamowienie"/>
+        </Menu>
+    </MenuBar>
 
-               <TableView fx:id="tabelaProduktow" VBox.vgrow="ALWAYS">
-                    <columns>
-                        <TableColumn fx:id="kolumnaId" prefWidth="50.0" text="ID" />
-                        <TableColumn fx:id="kolumnaNazwa" prefWidth="150.0" text="Nazwa" />
-                        <TableColumn fx:id="kolumnaCena" prefWidth="100.0" text="Cena" />
-                        <TableColumn fx:id="kolumnaIlosc" prefWidth="100.0" text="Ilość" />
-                        <TableColumn fx:id="kolumnaProducent" prefWidth="100.0" text="Producent" />
-                        <TableColumn fx:id="kolumnaKategoria" prefWidth="100.0" text="Kategoria" />
-                        <TableColumn fx:id="kolumnaOpis" prefWidth="150.0" text="Opis" />
-                    </columns>
-                    <contextMenu>
-                        <ContextMenu>
-                            <items>
-                                <MenuItem text="Usuń" onAction="#handleDelete"/>
-                            </items>
-                        </ContextMenu>
-                    </contextMenu>
-                </TableView>
-            </VBox>
+    <TabPane VBox.vgrow="ALWAYS">
+        <Tab text="Produkty" closable="false">
+<TableView fx:id="tabelaProduktow">
+    <columns>
+        <TableColumn fx:id="kolumnaId" text="ID"/>
+        <TableColumn fx:id="kolumnaNazwa" text="Nazwa"/>
+        <TableColumn fx:id="kolumnaCena" text="Cena"/>
+        <TableColumn fx:id="kolumnaIlosc" text="Ilość"/>
+        <TableColumn fx:id="kolumnaProducent" text="Producent"/>
+        <TableColumn fx:id="kolumnaKategoria" text="Kategoria"/>
+        <TableColumn fx:id="kolumnaOpis" text="Opis"/>
+    </columns>
+</TableView>
+        </Tab>
+        <Tab text="Dostawcy" closable="false">
+            <TableView fx:id="tabelaDostawcow">
+                <columns>
+                    <TableColumn fx:id="kolumnaIdDostawcy" text="ID"/>
+                    <TableColumn fx:id="kolumnaNazwaDostawcy" text="Nazwa"/>
+                    <TableColumn fx:id="kolumnaAdres" text="Adres"/>
+                    <TableColumn fx:id="kolumnaNip" text="NIP"/>
+                    <TableColumn fx:id="kolumnaTelefon" text="Telefon"/>
+                    <TableColumn fx:id="kolumnaEmail" text="Email"/>
+                </columns>
+            </TableView>
+        </Tab>
+        <Tab text="Zamówienia" closable="false">
+            <TableView fx:id="tabelaZamowien">
+                <columns>
+                    <TableColumn fx:id="kolumnaIdZamowienia" text="ID"/>
+                    <TableColumn fx:id="kolumnaDataZamowienia" text="Data"/>
+                    <TableColumn fx:id="kolumnaKlient" text="Klient"/>
+                    <TableColumn fx:id="kolumnaWartosc" text="Wartość"/>
+                    <TableColumn fx:id="kolumnaStatus" text="Status"/>
+                </columns>
+            </TableView>
+        </Tab>
+    </TabPane>
+</VBox>

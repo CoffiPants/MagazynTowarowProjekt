@@ -1,0 +1,38 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.magazyntowarowprojekt.ZamowienieDialogController"
+      spacing="10">
+
+    <GridPane hgap="10" vgap="10">
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
+
+        <Label text="Klient:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="klientField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+        <Label text="Wartość:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="wartoscField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+        <Label text="Status:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <ComboBox fx:id="statusComboBox" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+        <Label text="Produkty:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <ListView fx:id="produktyListView" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+        <Button text="Dodaj produkt" onAction="#handleDodajProdukt"
+                GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT" VBox.vgrow="NEVER">
+        <padding>
+            <Insets bottom="15" right="15"/>
+        </padding>
+        <Button text="Zapisz" onAction="#handleSave"/>
+        <Button text="Anuluj" onAction="#handleCancel"/>
+    </HBox>
+</VBox>
